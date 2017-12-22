@@ -6,6 +6,24 @@ before_install:
   - sudo apt-get install -qq graphviz-dev python-setuptools python3-dev python-virtualenv python-pip
   - sudo apt-get install -qq firefox automake libtool libreadline6 libreadline6-dev libreadline-dev
   - sudo apt-get install -qq libsqlite3-dev libxml2 libxml2-dev libssl-dev libbz2-dev wget curl llvm
+  - export DJANGO_SETTINGS_MODULE=your_project.settings
+  - export PYTHONPATH=$HOME/builds/your_github_username/your_repo
 language: python
 python:
   - "3.5"
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - py.test
+  - python manage.py makemigrations
+  - python manage.py migrate
+
+services:
+  - mysql
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
